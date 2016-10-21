@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np 
-import os, sys
+import os, gc, sys
 
 from ml_metrics import mapk
 
@@ -31,19 +31,13 @@ if eval:
 
 cnt = train[train.clicked==1].ad_id.value_counts()
 cntall = train.ad_id.value_counts()
-'''
-print("Total clicks of all ads")
-print(cnt)
-print("Total shows of all ads") rint(cntall)
-sys.exit(0)
-'''
+
 del train
+gc.collect()
    
 if eval:
 	y = valid[valid.clicked==1].ad_id.values
-	#print(y)
 	y = [[_] for _ in y]
-	#print(y)
 	p = valid.groupby('display_id').ad_id.apply(list)
 	print(p[:10])
 	p = [sorted(x, key=get_prob, reverse=True) for x in p]
